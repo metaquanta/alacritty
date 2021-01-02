@@ -66,3 +66,21 @@ x11 = ["copypasta/x11", "glutin/x11", "x11-dl", "png"]
 wayland = ["copypasta/wayland", "glutin/wayland", "wayland-client"]
 nightly = []
 bench = []
+
+[package.metadata.deb]
+extended-description = ""
+provides = "x-terminal-emulator"
+changelog = "../CHANGELOG.md"
+assets = [
+    ["../target/release/a/alacritty", "usr/share/terminfo/a/", "644"], 
+    ["../target/release/a/alacritty-direct", "usr/share/terminfo/a/", "644"], 
+    ["target/release/alacritty", "usr/bin/", "755"], 
+    ["README.md", "usr/share/doc/alacritty/", "644"],
+    ["../extra/logo/alacritty-term.svg", "usr/share/pixmaps/Alacritty.svg", "644"],
+    ["../extra/linux/Alacritty.desktop", "usr/share/applications/", "644"],
+    ["../target/release/alacritty.1.gz","/usr/localshare/man/man1/", "644"],
+    ["../extra/completions/_alacritty", "usr/share/zsh/vendor-completions/", "644"],
+    ["../extra/completions/alacritty.bash", "usr/share/bash-completion/completions/", "644"],
+    ["../extra/completions/alacritty.fish","usr/share/fish/completions/", "644"],
+    ["../alacritty.yml", "usr/share/doc/alacritty/example_conf.yaml", "644"]
+]
