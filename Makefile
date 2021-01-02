@@ -5,8 +5,7 @@ ASSETS_DIR = extra
 RELEASE_DIR = target/release
 MAN_SOURCE = $(ASSETS_DIR)/alacritty.man
 MANPAGE = $(RELEASE_DIR)/alacritty.1.gz
-TERMINFO_SOURCE = $(ASSETS_DIR)/alacritty.info
-TERMINFO = $(RELEASE_DIR)/a
+TERMINFO = $(ASSETS_DIR)/alacritty.info
 COMPLETIONS_DIR = $(ASSETS_DIR)/completions
 COMPLETIONS = $(COMPLETIONS_DIR)/_alacritty \
 	$(COMPLETIONS_DIR)/alacritty.bash \
@@ -39,12 +38,12 @@ $(TARGET):
 	MACOSX_DEPLOYMENT_TARGET="10.11" cargo build --release
 
 app: | $(APP_NAME) ## Clone Alacritty.app template and mount binary
-$(APP_NAME): $(TARGET) $(TERMINFO) $(MANPAGE)
+$(APP_NAME): $(TARGET) $(MANPAGE)
 	@mkdir -p $(APP_BINARY_DIR)
 	@mkdir -p $(APP_EXTRAS_DIR)
 	@mkdir -p $(APP_COMPLETIONS_DIR)
 	@cp -fp $(MANPAGE) $(APP_EXTRAS_DIR)
-	@cp -fpr $(TERMINFO) $(APP_EXTRAS_DIR)
+	@tic -xe alacritty,alacritty-direct -o $(APP_EXTRAS_DIR) $(TERMINFO)
 	@cp -fRp $(APP_TEMPLATE) $(APP_DIR)
 	@cp -fp $(APP_BINARY) $(APP_BINARY_DIR)
 	@cp -fp $(COMPLETIONS) $(APP_COMPLETIONS_DIR)
@@ -66,16 +65,12 @@ install: $(DMG_NAME) ## Mount disk image
 	@open $(DMG_DIR)/$(DMG_NAME)
 
 deb: | $(DEB_NAME) ## Build .deb package
-$(DEB_NAME): $(MANPAGE) $(TERMINFO) alacritty/Cargo.toml
+$(DEB_NAME): $(MANPAGE) alacritty/Cargo.toml
 	cargo-deb -p alacritty
 
 $(MANPAGE):
 	@mkdir -p $(RELEASE_DIR)
 	@gzip -c $(MAN_SOURCE) > $(MANPAGE)
-
-$(TERMINFO):
-	@mkdir -p $(RELEASE_DIR)
-	@tic -xe alacritty,alacritty-direct -o $(RELEASE_DIR) $(TERMINFO_SOURCE)
 
 .PHONY: all help app binary clean dmg install deb $(TARGET)
 
