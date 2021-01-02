@@ -71,6 +71,7 @@ bench = []
 extended-description = ""
 provides = "x-terminal-emulator"
 changelog = "../CHANGELOG.md"
+section = "x11"
 assets = [
     ["target/release/alacritty", "usr/bin/", "755"], 
     ["README.md", "usr/share/doc/alacritty/", "644"],
